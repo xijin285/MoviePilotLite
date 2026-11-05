@@ -4,9 +4,9 @@ import 'package:moviepilot_mobile/modules/dynamic_form/models/random_pic_models.
 /// RandomPic 插件转换器：把插件 API 的原始 JSON 转成移动端 FormBlock。
 ///
 /// 该插件在 Web 端使用 Vue 联邦组件（`get_render_mode()` 返回 `vue`），
-/// App 无法直接渲染其远端组件，因此这里按插件真实接口（v2.3.1）重建原生界面：
+/// App 无法直接渲染其远端组件，因此这里按插件真实接口（v3.1.1）重建原生界面：
 /// - page 模式：运行状态、图源配置、图片统计、接口可用性
-/// - form 模式：横/竖屏目录、网络图源、下载数量等可编辑项
+/// - form 模式：横/竖屏目录、网络图源、下载数量、网络图源优先、仪表盘开关等可编辑项
 class RandomPicConverter {
   /// 展示页：status → FormBlock 列表（只读概览）
   static List<FormBlock> convertPage({required RandomPicStatus status}) {
@@ -137,6 +137,16 @@ class RandomPicConverter {
         label: '启用插件',
         name: 'enable',
         value: config.enable,
+      ),
+      FormBlock.switchField(
+        label: '仪表盘显示',
+        name: 'dashboard_enable',
+        value: config.dashboardEnable,
+      ),
+      FormBlock.switchField(
+        label: '网络图源优先',
+        name: 'network_first',
+        value: config.networkFirst,
       ),
       const FormBlock.pageHeader(title: '横屏图片源'),
       FormBlock.textField(

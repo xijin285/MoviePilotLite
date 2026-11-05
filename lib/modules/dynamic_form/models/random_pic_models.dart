@@ -110,6 +110,10 @@ class RandomPicStatus {
 }
 
 /// RandomPic 配置模型：对应 GET /POST /api/v1/plugin/RandomPic/config
+///
+/// v3.1.1 起新增 `network_first`（网络图源优先）与
+/// `dashboard_enable`（仪表盘开关），保存时必须回传，
+/// 否则服务端会按默认值（False / True）重置。
 class RandomPicConfig {
   const RandomPicConfig({
     required this.enable,
@@ -121,6 +125,8 @@ class RandomPicConfig {
     required this.downloadCount,
     this.defaultPcPath = '',
     this.defaultMobilePath = '',
+    this.networkFirst = false,
+    this.dashboardEnable = true,
   });
 
   factory RandomPicConfig.fromJson(Map<String, dynamic> json) {
@@ -136,6 +142,8 @@ class RandomPicConfig {
           : _intOf(json['download_count']),
       defaultPcPath: _stringOf(json['default_pc_path']),
       defaultMobilePath: _stringOf(json['default_mobile_path']),
+      networkFirst: json['network_first'] == true,
+      dashboardEnable: json['dashboard_enable'] != false,
     );
   }
 
@@ -149,6 +157,12 @@ class RandomPicConfig {
   final String defaultPcPath;
   final String defaultMobilePath;
 
+  /// 网络图源优先（v3.1.1 新增）
+  final bool networkFirst;
+
+  /// 仪表盘开关（v3.1.1 新增，服务端默认开启）
+  final bool dashboardEnable;
+
   RandomPicConfig copyWith({bool? enable}) {
     return RandomPicConfig(
       enable: enable ?? this.enable,
@@ -160,6 +174,8 @@ class RandomPicConfig {
       downloadCount: downloadCount,
       defaultPcPath: defaultPcPath,
       defaultMobilePath: defaultMobilePath,
+      networkFirst: networkFirst,
+      dashboardEnable: dashboardEnable,
     );
   }
 
@@ -172,6 +188,8 @@ class RandomPicConfig {
       'network_image_url_mobile': networkImageUrlMobile,
       'network_image_url': networkImageUrl,
       'download_count': downloadCount,
+      'network_first': networkFirst,
+      'dashboard_enable': dashboardEnable,
     };
   }
 
@@ -186,6 +204,8 @@ class RandomPicConfig {
       downloadCount: _intOf(model['download_count']) == 0
           ? 20
           : _intOf(model['download_count']),
+      networkFirst: model['network_first'] == true,
+      dashboardEnable: model['dashboard_enable'] != false,
     );
   }
 
@@ -198,6 +218,8 @@ class RandomPicConfig {
       'network_image_url_mobile': networkImageUrlMobile,
       'network_image_url': networkImageUrl,
       'download_count': downloadCount.toString(),
+      'network_first': networkFirst,
+      'dashboard_enable': dashboardEnable,
     };
   }
 }
